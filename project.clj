@@ -1,4 +1,4 @@
-(def lucene-version "8.7.0")
+(def lucene-version "8.8.0")
 
 (defproject org.msync/lucene-clj "0.2.0-SNAPSHOT"
   :description "Lucene bindings for Clojure"
@@ -9,7 +9,9 @@
                  [org.apache.lucene/lucene-core ~lucene-version]
                  [org.apache.lucene/lucene-queryparser ~lucene-version]
                  [org.apache.lucene/lucene-analyzers-common ~lucene-version]
-                 [org.apache.lucene/lucene-suggest ~lucene-version]]
+                 [org.apache.lucene/lucene-suggest ~lucene-version]
+                 [org.apache.lucene/lucene-highlighter ~lucene-version]
+                 [org.apache.lucene/lucene-memory ~lucene-version]]
   :implicits false
 
   :source-paths ["src/clj"]
