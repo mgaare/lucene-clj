@@ -70,9 +70,10 @@
                  repeat)
      doc-vecs)))
 
-(defn map->document [m {:keys [indexed-fields stored-fields keyword-fields suggest-fields context-fn]}]
+(defn map->document
   "Convert a map to a Lucene document.
   Lossy on the way back. Also, string field names come back as keywords."
+  [m {:keys [indexed-fields stored-fields keyword-fields suggest-fields context-fn]}]
   (let [field-names (keys m)
         keyword-fields (into #{} keyword-fields)
         stored-fields (into #{} (or stored-fields field-names))
@@ -102,11 +103,12 @@
       (add-fields! doc [field-key weight] (get m field-key) suggest-field-creator))
     doc))
 
-(defn fn:map->document [{:keys [field-names indexed-fields
-                                stored-fields keyword-fields
-                                suggest-fields context-fn]}]
+(defn fn:map->document
   "Convert a map to a Lucene document.
   Lossy on the way back. Also, string field names come back as keywords."
+  [{:keys [field-names indexed-fields
+           stored-fields keyword-fields
+           suggest-fields context-fn]}]
   (let [keyword-fields (into #{} keyword-fields)
         stored-fields (into #{} (or stored-fields field-names))
         suggest-fields (reduce

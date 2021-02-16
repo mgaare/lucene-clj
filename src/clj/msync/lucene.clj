@@ -26,6 +26,15 @@
      (with-open [reader (indexer/index-reader directory)]
        (search/search reader query-form opts)))))
 
+(defn search-with-highlights
+  ([^IndexConfig index-config query-form]
+   (search-with-highlights index-config query-form {}))
+  ([^IndexConfig index-config query-form opts]
+   (let [{:keys [directory analyzer]} index-config
+         opts (assoc opts :analyzer analyzer)]
+     (with-open [reader (indexer/index-reader directory)]
+       (search/search-with-highlights reader query-form opts)))))
+
 (defn suggest
   [^IndexConfig index-config field-name ^String prefix-query & [opts]]
   (let [{:keys [directory analyzer]} index-config
