@@ -31,15 +31,18 @@
 (defn search-with-highlights
   "A search that uses a highlighter to get relevant offsets."
   [^IndexReader index-store query-form
-   {:keys [field-name results-per-page analyzer hit->doc page fuzzy?]
+   {:keys [field-name results-per-page analyzer hit->doc page fuzzy? prefix?]
     :or   {results-per-page 10
            page             0
            hit->doc         identity
-           fuzzy?           false}}]
+           fuzzy?           false
+           prefix?          false}}]
   (let [^IndexSearcher searcher (IndexSearcher. index-store)
         field-name              (if field-name (name field-name))
-        ^Query query            (if fuzzy?
-                                  (query/combine-fuzzy-queries query-form)
+        ^Query query            (cond
+                                  fuzzy? (query/combine-fuzzy-queries query-form)
+                                  prefix? (query/combine-prefix-queries query-form)
+                                  :else
                                   (query/parse query-form {:analyzer analyzer :field-name field-name}))
         ^Highlighter highlighter (Highlighter. (QueryScorer. query))
         ^TopDocs hits           (.search searcher query (int (+ (* page results-per-page) results-per-page)))

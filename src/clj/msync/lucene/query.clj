@@ -1,11 +1,12 @@
 (ns msync.lucene.query
   (:import
-    [org.apache.lucene.search Query BooleanQuery$Builder BooleanClause$Occur FuzzyQuery]
-    [clojure.lang Sequential IPersistentSet IPersistentMap IMapEntry]
-    [org.apache.lucene.util QueryBuilder]
-    [org.apache.lucene.analysis Analyzer]
-    [org.apache.lucene.queryparser.classic QueryParser]
-    [org.apache.lucene.index Term]))
+   [org.apache.lucene.search Query BooleanQuery$Builder BooleanClause$Occur
+    FuzzyQuery PrefixQuery]
+   [clojure.lang Sequential IPersistentSet IPersistentMap IMapEntry]
+   [org.apache.lucene.util QueryBuilder]
+   [org.apache.lucene.analysis Analyzer]
+   [org.apache.lucene.queryparser.classic QueryParser]
+   [org.apache.lucene.index Term]))
 
 ;; Unabashedly based on https://github.com/federkasten/clucie/blob/master/src/clucie/query.clj
 
@@ -79,4 +80,14 @@
   (let [b (BooleanQuery$Builder.)]
     (doseq [[k v] m]
       (.add b (create-fuzzy-query k v) BooleanClause$Occur/SHOULD))
+    (.build b)))
+
+(defn create-prefix-query [fld ^String val]
+  (let [term (Term. ^String (name fld) val)]
+    (PrefixQuery. term)))
+
+(defn combine-prefix-queries [m]
+  (let [b (BooleanQuery$Builder.)]
+    (doseq [[k v] m]
+      (.add b (create-prefix-query k v) BooleanClause$Occur/SHOULD))
     (.build b)))
