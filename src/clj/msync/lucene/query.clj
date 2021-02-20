@@ -73,8 +73,11 @@
      (.parse qp dsl))))
 
 (defn create-fuzzy-query [fld ^String val]
-  (let [term (Term. ^String (name fld) val)]
-    (FuzzyQuery. term)))
+  (let [term (Term. ^String (name fld) val)
+        max-edits (cond (< (count val) 5) 0
+                        (< 4 (count val) 8) 1
+                        :else 2)]
+    (FuzzyQuery. term max-edits)))
 
 (defn combine-fuzzy-queries [m]
   (let [b (BooleanQuery$Builder.)]
