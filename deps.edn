@@ -1,4 +1,5 @@
-{:deps
+{:paths ["src/clj"]
+ :deps
  {org.apache.lucene/lucene-core {:mvn/version "8.8.0"}
   org.apache.lucene/lucene-queryparser {:mvn/version "8.8.0"}
   org.apache.lucene/lucene-analyzers-common {:mvn/version "8.8.0"}
